@@ -12,12 +12,31 @@
 
 #define NUM_INPUTS  14
 
-NOTIFYICONDATA nid;
-
-int main()
+//int main() {
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int nCmdShow)
 {
-    std::cout << "Starting App...\n";
+    // Create a hidden window to make the program run like an application
+    WNDCLASS wc = { 0 };
+    wc.lpfnWndProc = trayWindowProc; // Use the tray window procedure
+    wc.hInstance = hInstance;
+    wc.lpszClassName = L"MouseController";
 
+    if (!RegisterClass(&wc)) {
+        MessageBox(NULL, L"Failed. Error 1.", L"Error", MB_ICONERROR);
+        return 1;
+    }
+
+    HWND hwnd = CreateWindow(L"MouseController", L"MouseController",
+        0, 0, 0, 0, 0, NULL, NULL, hInstance, NULL);
+    if (!hwnd) {
+        MessageBox(NULL, L"Failed. Error 2.", L"Error", MB_ICONERROR);
+        return 1;
+    }
+
+    initTrayIcon(hInstance, hwnd);
+    
+
+    // Prepare the XInput state struct, and define variables.
     XINPUT_STATE state;
     ZeroMemory(&state, sizeof(XINPUT_STATE));
 
@@ -65,7 +84,16 @@ int main()
     bool ENABLED = true;
     bool TOGGLED, WASTOGGLED = false;
 
+    MSG msg;
     while (1) {
+        // Deal with message regardless of controller being active or not.
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            if (msg.message == WM_QUIT) break;
+
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
         if (XInputGetState(0, &state) == ERROR_SUCCESS) {
             // Start, Back, LB and RB need to be pressed to disable/reenable.
             TOGGLED = (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) &&
@@ -76,8 +104,6 @@ int main()
                 ENABLED = !ENABLED;
                 WASTOGGLED = true;
                 notif(ENABLED);
-
-                std::cout << (ENABLED ? "Controller Mouse Input Enabled" : "Controller Mouse Input Disabled") << std::endl;
             }
             else if (!TOGGLED && WASTOGGLED) {
                 WASTOGGLED = false;
@@ -108,6 +134,8 @@ int main()
         }
         Sleep(ENABLED ? 10 : 1000);
     }
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

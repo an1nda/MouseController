@@ -3,19 +3,19 @@
 #include <Windows.h>
 #include <shellapi.h>
 
-#define WM_TRAYICON (WM_USER + 1)
+#define WM_TRAYICON		(WM_USER + 1)
+#define ID_TRAY_EXIT	1001
 
 extern NOTIFYICONDATA nid;
+extern HINSTANCE hin;
 
 /*
 * Helper Functions to accomplish a tray icon.
 * 
 */
-void ShowTrayIcon(HINSTANCE hin, HWND hwnd);
-void RemoveTrayIcon();
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-int APIENTRY wWinMain(HINSTANCE hin, HINSTANCE prevhin, LPWSTR lpCmdLine, int nCmdShow);
-
+void initTrayIcon(HINSTANCE hinstance, HWND hwnd);
+void delTrayIcon();
+LRESULT CALLBACK trayWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 /*
 * Helper Functions to create a notification system.
