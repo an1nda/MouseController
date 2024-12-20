@@ -5,8 +5,8 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <shellapi.h>
-#include "MouseHelper.h"
-#include "WinHelper.h"
+#include "KBMHelper.h"
+#include "WinProcHelper.h"
 
 #pragma comment(lib, "Xinput.lib")
 
@@ -46,22 +46,22 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine
         B       Right Click
         X       Touch Keyboard
         Y       Task View
-        RB
-        LB
+        RB      Right Arrow
+        LB      Left Arrow
         R3      Middle Click
-        L3
-        Start   Windows Key
+        L3      
+        Start   
         Back
 
-        D-Pad   Media Control (NESW): TBD, Next, Pause/Play, Prev
+        D-Pad   Media Control (NESW): ? , Next, Pause/Play, Prev
     */
 
-    // 0  1  2  3  4  5  6  7
-    // A  B  X  Y  RB LB R3 L3
+    // 0  1  2  3  4  5  6  7  8  9  10-13
+    // A  B  X  Y  RB LB R3 L3 S  B  D-Pad
     bool isPressed;     
     bool wasPressed[NUM_INPUTS];
     memset(wasPressed, 0, sizeof(bool) * 8);
-
+    
     UINT XINPUT_MASK[NUM_INPUTS] = {
         XINPUT_GAMEPAD_A,
         XINPUT_GAMEPAD_B,

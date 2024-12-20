@@ -128,12 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MouseController.cpp" />
-    <ClCompile Include="MouseHelper.cpp" />
-    <ClCompile Include="WinHelper.cpp" />
+    <ClCompile Include="KBMHelper.cpp" />
+    <ClCompile Include="WinProcHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MouseHelper.h" />
-    <ClInclude Include="WinHelper.h" />
+    <ClInclude Include="KBMHelper.h" />
+    <ClInclude Include="WinProcHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-#include "WinHelper.h"
+#include "WinProcHelper.h"
 
 NOTIFYICONDATA nid = { 0 };
 HINSTANCE hin = nullptr;

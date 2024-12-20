@@ -18,18 +18,18 @@
     <ClCompile Include="MouseController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MouseHelper.cpp">
+    <ClCompile Include="KBMHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinHelper.cpp">
+    <ClCompile Include="WinProcHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MouseHelper.h">
+    <ClInclude Include="KBMHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinHelper.h">
+    <ClInclude Include="WinProcHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
