@@ -1,9 +1,31 @@
 #include "WinProcHelper.h"
 #include "resource.h"
+#include <fstream>
 #include <CommCtrl.h>
 
 NOTIFYICONDATA nid = { 0 };
 HINSTANCE hin = nullptr;
+
+void saveSens(int sens) {
+	HKEY hkey;
+	if (RegCreateKeyEx(HKEY_CURRENT_USER, L"Software\\MouseController", 0, NULL, 0, KEY_SET_VALUE, NULL, &hkey, NULL) == ERROR_SUCCESS) {
+		RegSetValueEx(hkey, L"Sensitivity", 0, REG_DWORD, (const BYTE*)&sens, sizeof(sens));
+		RegCloseKey(hkey);
+	}
+}
+
+int loadSens() {
+	HKEY hkey;
+	int temp = 17;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\MouseController", 0, KEY_READ, &hkey) == ERROR_SUCCESS) {
+		DWORD dataSize = sizeof(temp);
+		if (RegQueryValueEx(hkey, L"Sensitivity", NULL, NULL, (LPBYTE)&temp, &dataSize) != ERROR_SUCCESS) {
+			temp = 17;  // Use default if no value exists
+		}
+		RegCloseKey(hkey);
+	}
+	return temp;
+}
 
 void notif(bool en) {
 	nid.uFlags |= NIF_INFO;
@@ -50,6 +72,7 @@ INT_PTR CALLBACK SensDialogProc(HWND hdlg, UINT message, WPARAM wparam, LPARAM l
 	case WM_COMMAND:
 		if (LOWORD(wparam) == IDOK) {
 			sens = (int)SendMessage(hslider, TBM_GETPOS, 0, 0);
+			saveSens(sens);
 
 			EndDialog(hdlg, LOWORD(wparam));
 			return TRUE;

@@ -22,3 +22,7 @@ LRESULT CALLBACK trayWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 * Helper Functions to create a notification system.
 */
 void notif(bool en);
+
+
+void saveSens(int sens);
+int loadSens();
