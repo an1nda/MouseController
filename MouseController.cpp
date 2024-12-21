@@ -12,7 +12,10 @@
 
 #define NUM_INPUTS  14
 
-//int main() {
+int sens;
+
+
+
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int nCmdShow)
 {
     // Create a hidden window to make the program run like an application
@@ -79,8 +82,8 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine
         XINPUT_GAMEPAD_DPAD_RIGHT
     };
 
+    sens = 20; // Default sensitivity
 
-    int sens = 18;
     bool ENABLED = true;
     bool TOGGLED, WASTOGGLED = false;
 

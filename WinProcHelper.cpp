@@ -1,4 +1,6 @@
 #include "WinProcHelper.h"
+#include "resource.h"
+#include <CommCtrl.h>
 
 NOTIFYICONDATA nid = { 0 };
 HINSTANCE hin = nullptr;
@@ -21,7 +23,7 @@ void initTrayIcon(HINSTANCE hinstance, HWND hwnd) {
 	nid.uID = 1;
 	nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
 	nid.uCallbackMessage = WM_TRAYICON;
-	nid.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	nid.hIcon = LoadIcon(hin, MAKEINTRESOURCE(IDI_ICON2));
 
 	wcscpy_s(nid.szTip, L"MouseController");
 
@@ -32,6 +34,32 @@ void delTrayIcon() {
 	Shell_NotifyIcon(NIM_DELETE, &nid);
 }
 
+
+INT_PTR CALLBACK SensDialogProc(HWND hdlg, UINT message, WPARAM wparam, LPARAM lparam) {
+	static HWND hslider;
+
+	switch (message) {
+	case WM_INITDIALOG:
+		hslider = GetDlgItem(hdlg, IDC_SLIDER_SENS);
+
+		SendMessage(hslider, TBM_SETRANGE, TRUE, MAKELONG(5, 50));
+		SendMessage(hslider, TBM_SETPOS, TRUE, sens);
+
+		return TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wparam) == IDOK) {
+			sens = (int)SendMessage(hslider, TBM_GETPOS, 0, 0);
+
+			EndDialog(hdlg, LOWORD(wparam));
+			return TRUE;
+		}
+		break;
+	}
+
+	return FALSE;
+}
+
 LRESULT CALLBACK trayWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	switch (msg) {
 	case WM_TRAYICON:
@@ -39,12 +67,20 @@ LRESULT CALLBACK trayWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 			POINT pt;
 			GetCursorPos(&pt);
 			HMENU hmenu = CreatePopupMenu();
+
+			AppendMenu(hmenu, MF_STRING, ID_TRAY_SENS_ADJ, L"Adjust Sens");
 			AppendMenu(hmenu, MF_STRING, ID_TRAY_EXIT, L"Close");
+
 			SetForegroundWindow(hwnd);
 			int cmd = TrackPopupMenu(hmenu, TPM_RETURNCMD | TPM_NONOTIFY, pt.x, pt.y, 0, hwnd, NULL);
 			DestroyMenu(hmenu);
 
-			if (cmd == ID_TRAY_EXIT) {
+			if (cmd == ID_TRAY_SENS_ADJ) {
+				if (DialogBox(hin, MAKEINTRESOURCE(IDD_SENS_DLG), hwnd, SensDialogProc) == -1) {
+					DWORD dwError = GetLastError();
+					MessageBox(hwnd, L"Failed. Error 3.", L"Error", MB_OK | MB_ICONERROR);
+				}
+			} else if (cmd == ID_TRAY_EXIT) {
 				PostQuitMessage(0);
 			}
 		}

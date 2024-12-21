@@ -3,11 +3,12 @@
 #include <Windows.h>
 #include <shellapi.h>
 
-#define WM_TRAYICON		(WM_USER + 1)
-#define ID_TRAY_EXIT	1001
+#define WM_TRAYICON			(WM_USER + 1)
 
 extern NOTIFYICONDATA nid;
 extern HINSTANCE hin;
+
+extern int sens;
 
 /*
 * Helper Functions to accomplish a tray icon.
