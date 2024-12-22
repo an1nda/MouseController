@@ -8,6 +8,7 @@ MouseController is an Window application meant to give ease to people who both h
 - All major mouse functionality, **excluding interaction with always-on-top programs**
 - Task view to quickly swap tabs in place of alt-tab, which can be navigated with controller bumpers
 - Media control using D-Pad allows to control music for when things get intense
+- Sensitivity can be changed using the menu from the tray icon
 
 ## Usage (Controller Mappings)
 > Enable/Disable Bind
